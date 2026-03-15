@@ -1,1 +1,1 @@
-# Declaraci-n-ART2
+# Declaracion-ART2
