@@ -625,7 +625,7 @@
       <div class="section-title">🚗 Intervención de Tercero <span class="badge">PASO 3 / 5</span></div>
       <div class="section-body">
 
-        <div class="field">
+        <div class="field" id="hubo_tercero_wrap">
           <label>¿Hubo intervención de un tercero en el accidente? <span class="req">*</span></label>
           <div class="toggle-group">
             <button class="toggle-btn" id="btn-tercero-si" onclick="toggleTercero('si')">✅ Sí</button>
@@ -896,13 +896,18 @@
     if (n > currentStep) {
       document.getElementById("step-" + currentStep).classList.add("done");
     } else {
-      document.getElementById("step-" + (n + 1))?.classList.remove("done");
+      for (let i = n + 1; i <= TOTAL_STEPS; i++) {
+        document.getElementById("step-" + i)?.classList.remove("done");
+      }
     }
     currentStep = n;
     document.getElementById("sec-" + currentStep).classList.add("active");
     document.getElementById("step-" + currentStep).classList.remove("done");
     document.getElementById("step-" + currentStep).classList.add("active");
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (n === 5) {
+      requestAnimationFrame(function() { requestAnimationFrame(initCanvas); });
+    }
   }
 
   function nextStep(n) {
@@ -1066,8 +1071,9 @@
     ctx.lineCap     = "round";
     ctx.lineJoin    = "round";
   }
-  window.addEventListener("load",   initCanvas);
-  window.addEventListener("resize", initCanvas);
+  window.addEventListener("resize", function() {
+    if (currentStep === 5) initCanvas();
+  });
 
   function getXY(e) {
     const rect = canvas.getBoundingClientRect();
@@ -1172,9 +1178,10 @@
 
       if (!res.ok) throw new Error("HTTP " + res.status);
 
-      document.querySelector(".container").innerHTML = "";
+      document.querySelectorAll(".section").forEach(s => s.style.display = "none");
+      document.querySelector(".progress-wrap").style.display = "none";
+      document.querySelector(".hero").style.display = "none";
       document.getElementById("screenOk").style.display = "block";
-      document.querySelector(".container").appendChild(document.getElementById("screenOk"));
 
     } catch (err) {
       document.getElementById("screenError").style.display = "block";
