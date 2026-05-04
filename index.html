@@ -575,7 +575,7 @@
           </div>
           <div class="field">
             <label>CUIL <span class="req">*</span></label>
-            <input type="text" id="empleado_cuil" placeholder="20-12345678-9" maxlength="13">
+            <input type="text" id="empleado_cuil" placeholder="20-12345678-9" maxlength="13" oninput="formatCuilCuit(this)">
           </div>
         </div>
 
@@ -599,11 +599,11 @@
         <div class="row-2">
           <div class="field">
             <label>Horario de entrada <span class="req">*</span></label>
-            <input type="time" id="horario_entrada">
+            <input type="time" id="horario_entrada" min="00:00" max="23:59">
           </div>
           <div class="field">
             <label>Horario de salida <span class="req">*</span></label>
-            <input type="time" id="horario_salida">
+            <input type="time" id="horario_salida" min="00:00" max="23:59">
           </div>
         </div>
 
@@ -633,11 +633,11 @@
         <div class="row-2">
           <div class="field">
             <label>Fecha en que tomó conocimiento <span class="req">*</span></label>
-            <input type="date" id="fecha_conocimiento">
+            <input type="date" id="fecha_conocimiento" min="2000-01-01">
           </div>
           <div class="field">
             <label>Hora aproximada <span class="req">*</span></label>
-            <input type="time" id="hora_conocimiento">
+            <input type="time" id="hora_conocimiento" min="00:00" max="23:59">
           </div>
         </div>
 
@@ -680,11 +680,11 @@
         <div class="row-2">
           <div class="field">
             <label>Fecha del accidente <span class="req">*</span></label>
-            <input type="date" id="fecha_accidente">
+            <input type="date" id="fecha_accidente" min="2000-01-01">
           </div>
           <div class="field">
             <label>Hora del accidente <span class="req">*</span></label>
-            <input type="time" id="hora_accidente">
+            <input type="time" id="hora_accidente" min="00:00" max="23:59">
           </div>
         </div>
 
@@ -943,7 +943,7 @@
         <div class="row-2">
           <div class="field">
             <label>CUIT del Empleador <span class="req">*</span></label>
-            <input type="text" id="empleador_cuit" placeholder="XX-XXXXXXXX-X" maxlength="13">
+            <input type="text" id="empleador_cuit" placeholder="XX-XXXXXXXX-X" maxlength="13" oninput="formatCuilCuit(this)">
           </div>
           <div class="field">
             <label>Teléfono del Empleador <span class="req">*</span></label>
@@ -1483,6 +1483,19 @@
     const bubble = document.getElementById('waBubble');
     bubble.classList.toggle('visible');
   }
+  function formatCuilCuit(input) {
+    var digits = input.value.replace(/\D/g, '').slice(0, 11);
+    if (digits.length <= 2)       input.value = digits;
+    else if (digits.length <= 10) input.value = digits.slice(0,2) + '-' + digits.slice(2);
+    else                          input.value = digits.slice(0,2) + '-' + digits.slice(2,10) + '-' + digits.slice(10);
+  }
+  (function() {
+    var hoy = new Date().toISOString().split('T')[0];
+    ["fecha_conocimiento", "fecha_accidente"].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.max = hoy;
+    });
+  })();
 </script>
 
 </body>
