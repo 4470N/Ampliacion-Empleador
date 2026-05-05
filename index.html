@@ -343,7 +343,7 @@
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     /* ── SCREENS ── */
-    #screenOk, #screenError { display: none; }
+    #screenOk { display: none; }
     #modalEnviando { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center; }
     #modalEnviando.activo { display:flex; }
     #modalBox { background:#fff; border-radius:12px; padding:32px 28px; max-width:360px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.18); }
@@ -1000,24 +1000,22 @@
     </div>
   </div>
 
-  <div id="screenError">
-    <div class="screen-card">
-      <div class="screen-icon">⚠️</div>
-      <h2>Error al enviar</h2>
-      <p>Ocurrió un inconveniente al procesar la denuncia. Por favor intentá nuevamente o comunicate con nuestro estudio.</p>
-      <br>
-      <button class="btn btn-secondary" onclick="resetError()">Reintentar</button>
-    </div>
-  </div>
-
 </div>
 
 <!-- MODAL ENVIANDO -->
 <div id="modalEnviando">
   <div id="modalBox">
-    <div id="progressLabel">Preparando documentación...</div>
-    <div id="progressBar"><div id="progressFill"></div></div>
-    <p id="modalMsg">Procesando su información, por favor aguarde...</p>
+    <div id="modalProgress">
+      <div id="progressLabel">Preparando documentación...</div>
+      <div id="progressBar"><div id="progressFill"></div></div>
+      <p id="modalMsg">Procesando su información, por favor aguarde...</p>
+    </div>
+    <div id="modalError" style="display:none">
+      <div style="font-size:32px;margin-bottom:12px">⚠️</div>
+      <h3 style="color:#c0392b;margin:0 0 8px;font-size:17px">Error al enviar</h3>
+      <p style="font-size:14px;color:#555;margin:0 0 16px;line-height:1.5">Ocurrió un inconveniente al procesar la denuncia. Por favor intentá nuevamente o comunicate con nuestro estudio.</p>
+      <button class="btn btn-secondary" onclick="resetError()">Reintentar</button>
+    </div>
   </div>
 </div>
 
@@ -1407,15 +1405,17 @@
       document.getElementById("screenOk").style.display = "block";
 
     } catch (err) {
-      document.getElementById("modalEnviando").classList.remove("activo");
-      document.getElementById("screenError").style.display = "block";
+      document.getElementById("modalProgress").style.display = "none";
+      document.getElementById("modalError").style.display = "block";
       btn.disabled    = false;
       btn.textContent = "✅ Enviar Denuncia ART";
     }
   }
 
   function resetError() {
-    document.getElementById("screenError").style.display = "none";
+    document.getElementById("modalEnviando").classList.remove("activo");
+    document.getElementById("modalError").style.display = "none";
+    document.getElementById("modalProgress").style.display = "block";
   }
 </script>
 
